@@ -1,10 +1,13 @@
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, List, Optional
 #from langchain_core._api import deprecated
 #from langchain_core.utils import get_from_env
 
-from opensearchpy import OpenSearch
+if TYPE_CHECKING:
+    from opensearchpy import OpenSearch
+
 import json
 from langchain_core.embeddings import Embeddings
 
@@ -100,3 +103,5 @@ class OpenSearchEmbedding(Embeddings):
             List[float]: The embedding for the query.
         """
         return self._embedding_func([text])[0]
+
+       return self._embedding_func([text])[0]
