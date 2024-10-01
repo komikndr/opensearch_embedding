@@ -1,9 +1,6 @@
-
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Optional
-#from langchain_core._api import deprecated
-#from langchain_core.utils import get_from_env
+from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from opensearchpy import OpenSearch
@@ -12,33 +9,19 @@ import json
 from langchain_core.embeddings import Embeddings
 
 class OpenSearchEmbedding(Embeddings):
-    """
-    A class to handle embedding generation using opensearchpy client for text embeddings.
-
-    Attributes:
-        client (OpenSearch): The OpenSearch client to connect to the OpenSearch instance.
-        model_id (str): The model ID of the OpenSearch ML model.
-                        https://host:9220/_plugins/_ml/_predict/text_embedding/MODEL_ID"
-        input_field (str): The field where the input text is stored (default: 'text_field').
-    """
-
     def __init__(
         self,
         client: OpenSearch,
         model_id: str,
-        *,
-        input_field: str = "text_field",
     ):
         self.client = client
         self.model_id = model_id
-        self.input_field = input_field
 
     @classmethod
     def from_opensearch_connection(
         cls,
         opensearch_connection: OpenSearch,
         model_id: str,
-        input_field: str = "text_field",
     ) -> OpenSearchEmbedding:
         """
         Class method to create an OpenSearchEmbedding object from an OpenSearch connection.
@@ -51,7 +34,7 @@ class OpenSearchEmbedding(Embeddings):
         Returns:
             OpenSearchEmbedding: An instance of the OpenSearchEmbedding class.
         """
-        return cls(opensearch_connection, model_id, input_field=input_field)
+        return cls(opensearch_connection, model_id)
 
     def _embedding_func(self, texts: List[str]) -> List[List[float]]:
         """
@@ -103,5 +86,3 @@ class OpenSearchEmbedding(Embeddings):
             List[float]: The embedding for the query.
         """
         return self._embedding_func([text])[0]
-
-       return self._embedding_func([text])[0]
